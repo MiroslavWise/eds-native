@@ -1,0 +1,7 @@
+export { Main } from './Main'
+export { Route } from './Route'
+export { Subject } from './Subject'
+export { Solution } from './Solution'
+export { DecisionsTaken } from './DecisionsTaken'
+export { Responsible } from './Responsible'
+export { ValidForm } from './ValidForm'

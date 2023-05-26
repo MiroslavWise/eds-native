@@ -1,0 +1,336 @@
+import { gql } from "@apollo/client";
+import {PERSON, SMALL_PERSON} from '../fragment'
+
+export const resolution_list_table = gql`
+        ${PERSON}
+        query(
+                $offset: Int
+                $author: String
+                $reg_num: String
+                $executors: String
+        ){
+                protocolResolutions(
+                        limit: 20
+                        offset: $offset
+                        author_GetFullNameRu_Icontains: $author
+                        document_RegisterNumber_StringNumber_Icontains: $reg_num
+                        protocolExecutors_Person_GetFullNameRu_Icontains: $executors
+                ){
+                        totalCount
+                        results{
+                                uuid
+                                text{
+                                        text
+                                }
+                                document{
+                                        uuid
+                                        registerNumber{
+                                                stringNumber
+                                        }
+                                }
+                                subject
+                                status
+                                createDate
+                                executedDate
+                                protocolExecutors{
+                                        isExecuted
+                                        person{
+                                                ...Person
+                                        }
+                                        isExpired
+                                }
+                                author{
+                                        ...Person
+                                }
+                        }
+                }
+        }
+`
+
+export const resolution_about = gql`
+        ${PERSON}
+        ${SMALL_PERSON}
+        query($id:UUID!){
+                protocolResolution(id:$id){
+                        uuid
+                        id
+                        status
+                        subject
+                        document{
+                                pdfUrl
+                                uuid
+                                registerNumber{
+                                        stringNumber
+                                }
+                                protocolsubjectSet{
+                                        name
+                                        text
+                                        uuid
+                                }
+                                approversList{
+                                        person{
+                                                ...SmallPerson
+                                        }
+                                }
+                                secretary{
+                                        ...SmallPerson
+                                }
+                                chairman{
+                                        ...SmallPerson
+                                }
+                        }
+                        executedDate
+                        number
+                        text{
+                                text
+                        }
+                        children{
+                                final
+                                status
+                                protocolExecutors{
+                                        isExecuted
+                                        isExpired
+                                        resolution{
+                                                uuid
+                                                subject
+                                                createDate
+                                                updateDate
+                                                status
+                                                children{
+                                                        uuid
+                                                        executedDate
+                                                        author{
+                                                                uuid
+                                                        }
+                                                }
+                                        }
+                                        person{
+                                                ...Person
+                                        }
+                                }
+                                uuid
+                                author{
+                                        abbreviatedNameRu
+                                        uuid
+                                        }
+                                }
+                        protocolExecutors{
+                                protocolresolutionexecution{
+                                        dateOfExecution
+                                }
+                                protocolresolutiondenied{
+                                        createdAt
+                                        isProcessed
+                                        uuid
+                                                executor{
+                                                        uuid
+                                                }
+                                                deniedPerson{
+                                                        ...Person
+                                                }
+                                        comment
+                                }
+                                isExpired
+                                isExecuted
+                                uuid
+                                person{
+                                        ...Person
+                                }
+                        }
+                        author{
+                                ...Person
+                        }
+                        protocolresolutiondeniedSet{
+                                uuid
+                                comment
+                                createdAt
+                                deniedPerson{
+                                        ...Person
+                                }
+                        }
+                        
+                }
+        }
+`
+
+export const protocol_about = gql`
+        ${PERSON}
+        query($id:UUID!){
+                protocol(id:$id){
+                        id
+                        tempNumber
+                        location
+                        pdfUrl
+                        pdfStatus
+                        protocolfileSet{
+                                uuid
+                                fileName
+                                fileUrl
+                        }
+                        approve{
+                                uuid
+                                isApproved
+                                isActive
+                                isRefused
+                                approvingBy{
+                                        uuid
+                                }
+                        }
+                        protocolagendaSet{
+                                uuid
+                                text
+                        }
+                        typeOfProtocol{
+                                uuid
+                                nameRu
+                        }
+                        invited
+                        protocolsign{
+                                uuid
+                                signer{
+                                        ...Person
+                                }
+                        }
+                        date
+                        validFrom
+                        protocolattendedSet{
+                                person{
+                                        ...Person
+                                }
+                        }
+                        periodOfExecution
+                        approversList{
+                                uuid
+                                person{
+                                        ...Person
+                                }
+                        }
+                        typeOfAgreement
+                        uuid
+                        status
+                        createDate
+                        typeName
+                        secretary{
+                                ...Person
+                        }
+                        chairman{
+                                ...Person
+                        }
+                        approversList{
+                                person{
+                                        ...Person
+                                }
+                        }
+                        history{
+                                id
+                                ifRefused
+                                document{
+                                        id
+                                }
+                                initiatorOfAction{
+                                        ...Person
+                                }
+                                action
+                                text
+                        }
+                        copies{
+                                version
+                                id
+                                uuid
+                                history{
+                                        id
+                                        ifRefused
+                                        document{
+                                                id
+                                        }
+                                        initiatorOfAction{
+                                                ...Person
+                                        }
+                                        action
+                                }
+                        }
+                        registerNumber{
+                                stringNumber
+                        }
+                        version
+                        resolutions{
+                                number
+                                id
+                                text{
+                                        uuid
+                                        text
+                                }
+                                parentResolution{
+                                        uuid
+                                }
+                                uuid
+                                subject
+                                agenda{
+                                        text
+                                        uuid
+                                }
+                                protocolExecutors{
+                                        person{
+                                                ...Person
+                                        }
+                                }
+                                executedDate
+                                protocolSubject{
+                                        uuid
+                                        name
+                                        text
+                                }
+                        }
+                        protocolsubjectSet{
+                                uuid
+                                text
+                                name
+                                speaker{
+                                        ...Person
+                                }
+                        }
+                        responsibleForExecute{
+                                ...Person
+                        }
+                }
+        }
+`
+
+export const doc_files = gql`
+        query($id:UUID!){
+                protocol(id: $id){
+                        protocolfileSet{
+                                uuid
+                                fileName
+                                fileUrl
+                        }
+                }
+        }
+`
+
+export const protocols = gql`
+        query ($offset: Int) {
+                protocols(
+                        offset: $offset
+                        limit: 20
+                        statusMultipleChoiceFilter: ["EXECUTED", "EXECUTING"]
+                ){
+                        totalCount
+                        results {
+                                uuid
+                                id
+                                status
+                                registerNumber {
+                                        stringNumber
+                                }
+                                secretary{
+                                        getFullNameRu
+                                }
+                                protocolsubjectSet{
+                                        text
+                                }
+                                createDate
+                        }
+                }
+        }
+`

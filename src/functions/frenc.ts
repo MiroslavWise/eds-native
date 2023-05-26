@@ -1,0 +1,3 @@
+export type TypeFrequency = "EVERY_DAY" | "EVERY_WEEK" | "EVERY_MONTH" | "EVERY_QUARTER" | "HALF_YEAR" | "EVERY_YEAR" | "NO_CONTROL"
+
+export const FREQUENCY: TypeFrequency[] = ["EVERY_DAY", "EVERY_WEEK", "EVERY_MONTH", "EVERY_QUARTER", "HALF_YEAR", "EVERY_YEAR", "NO_CONTROL"]
